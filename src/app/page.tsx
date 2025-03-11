@@ -5,7 +5,7 @@ import type { BlogPost } from "@prisma/client";
 import { Suspense } from "react";
 
 async function getPosts() {
-  await new Promise((resolve) => setTimeout(resolve, 2000));
+  // await new Promise((resolve) => setTimeout(resolve, 2000));
   const data = await prisma.blogPost.findMany({
     select: {
       title: true,

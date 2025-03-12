@@ -1,16 +1,22 @@
 import { buttonVariants } from "@/components/ui/button";
+import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 import {
   LoginLink,
   LogoutLink,
   RegisterLink,
 } from "@kinde-oss/kinde-auth-nextjs/components";
-import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
+// import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import Image from "next/image";
 import Link from "next/link";
 
-export default async function Navbar() {
-  const { getUser } = getKindeServerSession();
-  const user = await getUser();
+export default function Navbar() {
+  //  this uses dynamic with async function
+  // const { getUser } = getKindeServerSession();
+  // const user = await getUser();
+
+  //  this uses static without async function
+  const { getUser } = useKindeBrowserClient();
+  const user = getUser();
   console.log(user);
 
   return (

@@ -10,11 +10,11 @@ import Image from "next/image";
 import Link from "next/link";
 
 export default function Navbar() {
-  //  this uses dynamic with async function
+  //  this uses the server side to get the user (with async function)
   // const { getUser } = getKindeServerSession();
   // const user = await getUser();
 
-  //  this uses static without async function
+  //  this uses the client side to get the user (without async function)
   const { getUser } = useKindeBrowserClient();
   const user = getUser();
   console.log(user);

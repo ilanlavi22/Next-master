@@ -1,3 +1,4 @@
+"use client";
 import { buttonVariants } from "@/components/ui/button";
 import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 import {

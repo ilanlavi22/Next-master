@@ -10,6 +10,9 @@ export const revalidate = 7200; // 120 minutes / 2 hours revalidation
 async function getPosts() {
   // await new Promise((resolve) => setTimeout(resolve, 2000));
   const data = await prisma.blogPost.findMany({
+    orderBy: {
+      createdAt: "desc",
+    },
     select: {
       title: true,
       content: true,

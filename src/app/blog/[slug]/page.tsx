@@ -4,7 +4,6 @@ import { buttonVariants } from "@/components/ui/button";
 import { getSinglePost } from "@/lib/actions";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import Link from "next/link";
-import { notFound } from "next/navigation";
 
 type Params = Promise<{ slug: string }>;
 
@@ -15,7 +14,16 @@ export default async function page({ params }: { params: Params }) {
   const user = await getUser();
 
   if (!postData) {
-    return notFound();
+    return (
+      <div className="mx-auto max-w-3xl px-4 py-8">
+        <div className="flex flex-col items-center gap-4">
+          <p className="text-2xl font-bold">No post found!</p>
+          <Link href="/" className={`${buttonVariants({ variant: "link" })}`}>
+            Back to posts
+          </Link>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -28,7 +36,7 @@ export default async function page({ params }: { params: Params }) {
           Back to posts
         </Link>
 
-        {user.id === postData.authorId && (
+        {user?.id === postData.authorId && (
           <DeletePostButton id={postData.id}>Delete Post</DeletePostButton>
         )}
       </div>

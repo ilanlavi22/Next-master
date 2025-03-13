@@ -16,9 +16,12 @@ export default function Navbar() {
   // const user = await getUser();
 
   //  this uses the client side to get the user (without async function)
+  // useKindeBrowserClient is used for client-side authentication
+  // It provides user data without requiring an async call
+  // Unlike getKindeServerSession which runs on the server and needs await
+  // "getKindeServerSession" results by all the children get dynamic render since we await the user server side.
   const { getUser } = useKindeBrowserClient();
   const user = getUser();
-  console.log(user);
 
   return (
     <nav className="flex items-center justify-between py-5">

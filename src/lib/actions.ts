@@ -3,7 +3,7 @@
 import { prisma } from "@/lib/prisma";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import { revalidatePath } from "next/cache";
-import { notFound, redirect } from "next/navigation";
+import { redirect } from "next/navigation";
 import { cache } from "react";
 import { createPostSchema, CreatePostValues } from "./validation";
 
@@ -28,7 +28,7 @@ export async function createPost(formData: FormData) {
       authorName: user.given_name as string,
     },
   });
-  revalidatePath("/");
+  revalidatePath("/"); // clearing the home page cache when posting an article -- for static rendered pages as for dynamic pages its not needed.
   return redirect("/dashboard");
 }
 
@@ -48,11 +48,15 @@ export async function validateCreatePost(values: CreatePostValues) {
   };
 }
 
+// The React cache function is used to memoize the result of this async function.
+// This means if getSinglePost is called multiple times with the same slug parameter,
+// it will return the cached result instead of making redundant database queries.
+// This helps improve performance by avoiding unnecessary database calls.
 export const getSinglePost = cache(async (slug: string) => {
   const post = await prisma.blogPost.findUnique({
     where: { id: slug },
   });
-  if (!post) notFound();
+  // if (!post) notFound();
   return post;
 });
 

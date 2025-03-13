@@ -4,6 +4,8 @@ import { prisma } from "@/lib/prisma";
 import type { BlogPost } from "@prisma/client";
 import { Suspense } from "react";
 
+export const revalidate = 7200; // 120 minutes / 2 hours revalidation
+
 async function getPosts() {
   // await new Promise((resolve) => setTimeout(resolve, 2000));
   const data = await prisma.blogPost.findMany({
@@ -32,7 +34,7 @@ export default async function Home() {
       {posts.length === 0 ? (
         <p>No Posts found</p>
       ) : (
-        <Suspense fallback={<BlogPostsGrid />}>
+        <Suspense fallback={<BlogPostsGrid count={posts.length} />}>
           <BlogPosts />
         </Suspense>
       )}
@@ -51,17 +53,17 @@ async function BlogPosts() {
 }
 
 // Blog posts grid with loading state
-function BlogPostsGrid() {
+function BlogPostsGrid({ count }: { count: number }) {
   return (
     <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
       {/*  get the data or the posts length ? */}
-      {Array.from({ length: 6 }).map((_, index) => (
+      {Array.from({ length: count }).map((_, index) => (
         <div
-          className="bg-card text-card-foreground flex h-[400px] flex-col overflow-hidden border"
+          className="bg-card text-card-foreground mb-6 flex w-full flex-col overflow-hidden rounded-tr-md rounded-bl-md border-gray-200"
           key={index}
         >
           {/* Image skeleton */}
-          <Skeleton className="h-48 w-full rounded-none" />
+          <Skeleton className="h-[370px] w-full rounded-none" />
 
           <div className="flex flex-1 flex-col gap-3 p-4">
             {/* Title skeleton */}

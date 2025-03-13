@@ -10,12 +10,7 @@ import Link from "next/link";
 type Params = Promise<{ slug: string }>;
 
 export async function generateStaticParams() {
-  const data = await prisma.blogPost.findMany({
-    select: {
-      id: true,
-      title: true,
-    },
-  });
+  const data = await prisma.blogPost.findMany({});
   return data.map(({ id }) => ({ params: { slug: id } }));
 }
 

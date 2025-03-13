@@ -5,6 +5,7 @@ import type { BlogPost } from "@prisma/client";
 import { Suspense } from "react";
 
 export const revalidate = 7200; // 120 minutes / 2 hours revalidation
+// wont work with params such as in the post slug and this where you use Generating Static Params
 
 async function getPosts() {
   // await new Promise((resolve) => setTimeout(resolve, 2000));

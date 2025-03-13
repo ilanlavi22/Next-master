@@ -2,10 +2,35 @@ import DeletePostButton from "@/components/DeletePostButton";
 import PostCard from "@/components/PostCard";
 import { buttonVariants } from "@/components/ui/button";
 import { getSinglePost } from "@/lib/actions";
+import { prisma } from "@/lib/prisma";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
+import type { Metadata } from "next";
 import Link from "next/link";
 
 type Params = Promise<{ slug: string }>;
+
+export async function generateStaticParams() {
+  const data = await prisma.blogPost.findMany({
+    select: {
+      id: true,
+      title: true,
+    },
+  });
+  return data.map(({ id }) => ({ params: { slug: id } }));
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Params;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const postData = await getSinglePost(slug);
+
+  return {
+    title: postData?.title,
+  };
+}
 
 export default async function page({ params }: { params: Params }) {
   const { slug } = await params;
